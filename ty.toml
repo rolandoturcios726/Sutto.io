@@ -1,0 +1,10 @@
+[environment]
+python-version = "3.14"
+
+[rules]
+# Every rule is an error, including the ones ty leaves off by default. A rule
+# is turned back off only when it cannot help this repo.
+all = "error"
+
+# Pydantic is not a dependency.
+pydantic-discarded-extra-argument = "ignore"
