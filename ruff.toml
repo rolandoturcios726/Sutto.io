@@ -1,0 +1,64 @@
+target-version = "py314"
+line-length = 100
+src = ["src", "tests"]
+
+[lint]
+# Everything is on. A rule is listed under `ignore` only when it cannot help
+# this repo; each group below says why.
+select = ["ALL"]
+ignore = [
+    # --- Owned by `ruff format`: these duplicate or fight the formatter. ---
+    "COM812", # trailing commas
+    "COM819", # prohibited trailing commas
+    "D206",   # docstring indented with tabs
+    "D300",   # docstring quote style
+    "E111",   # indentation width
+    "E114",   # comment indentation width
+    "E117",   # over-indentation
+    "E501",   # line length; the formatter owns it, and long prose strings are deliberately not wrapped
+    "ISC002", # implicit concatenation across lines
+    "Q",      # quote style
+    "W191",   # tab indentation
+
+    # --- Mutually exclusive pairs: keep D211 and D212, drop their opposites. ---
+    "D203", # blank line before class docstring
+    "D213", # multi-line summary on second line
+
+    # --- Frameworks and file types this repo does not have. ---
+    "AIR",  # Airflow
+    "DJ",   # Django
+    "FAST", # FastAPI
+    "INT",  # gettext
+    "NPY",  # NumPy
+    "PD",   # pandas
+    "PYI",  # .pyi stub files
+
+    # --- Conventions that do not fit this project. ---
+    "CPY",  # copyright headers: the LICENSE file covers it
+    "D413", # blank line after a docstring's last section: leaves an empty line before the closing quotes
+    "TC",   # moving annotation-only imports under `if TYPE_CHECKING:` adds a block to most files for little gain here
+    "T201", # print: CLI entry points report to stdout and CI logs with print; there is no logging setup
+]
+
+[lint.per-file-ignores]
+"**/__init__.py" = ["F401"] # intentional re-exports
+"tests/**/*.py" = [
+    "ANN",     # hand-rolled fakes and test methods; annotating them adds churn without value
+    "ARG",     # fakes and stubs must mirror the signatures they replace
+    "D1",      # test names describe the case; docstrings would repeat them
+    "EM",      # fakes raise builtin errors with a literal message; traceback tidiness is irrelevant here
+    "PLR2004", # literal expectations are idiomatic in tests
+    "PT009",   # self.assert* is the assertion style when the suite is unittest.TestCase
+    "PT027",   # same: self.assertRaises
+    "S101",    # assert
+    "SLF001",  # tests exercise private helpers directly
+    "TRY003",  # same as EM: a simulated failure does not need its own exception class
+]
+
+[lint.mccabe]
+max-complexity = 10
+
+[lint.pylint]
+max-branches = 12
+max-returns = 6
+max-statements = 50
